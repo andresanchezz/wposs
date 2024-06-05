@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 :root {
   --vt-c-white: #ffffff;
@@ -19,9 +20,25 @@
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+
+  --primary-color: #4e9ce4;
+
+  /* 
+     #f1f8fd
+     '#deeefb'
+     '#c5e3f8'
+     '#9dd2f3'
+     '#6fb8eb'
+     '#4e9ce4'
+     '#3880d8'
+     '#2f6cc6'
+     '#2c57a1'
+     '#284b80'
+     '#1d2f4e' */
+
+
 }
 
-/* semantic color variables for this project */
 :root {
   --color-background: var(--vt-c-white);
   --color-background-soft: var(--vt-c-white-soft);
@@ -55,18 +72,18 @@
 *::after {
   box-sizing: border-box;
   margin: 0;
+  padding: 0;
   font-weight: normal;
 }
 
 body {
   min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
   transition:
     color 0.5s,
     background-color 0.5s;
   line-height: 1.6;
   font-family:
+    "Poppins",
     Inter,
     -apple-system,
     BlinkMacSystemFont,
@@ -79,8 +96,36 @@ body {
     'Droid Sans',
     'Helvetica Neue',
     sans-serif;
-  font-size: 15px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  display: block;
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+form {
+  legend {
+    font-weight: bold;
+    text-align: center
+  }
+
+  input {
+    width: 100%;
+    padding: .7vh 1rem;
+    margin: 1vh 0;
+
+    &[type="submit"] {
+      text-transform: uppercase;
+    }
+  }
+
+  label {
+    margin-top: .5rem;
+    text-transform: capitalize;
+  }
+
 }
