@@ -1,8 +1,8 @@
 <template>
     <DarkBackground>
-        <form>
+        <form @submit.prevent="doTransaction">
             <label for="select-transaction">Tipo de transacción</label>
-            <select name="select-transaction" id="select-transaction" v-model="transactionType" required>
+            <select name="select-transaction" id="select-transaction" @change="verifyAmount" v-model="transactionType" required>
                 <option value="1">retiro</option>
                 <option value="2">depósito</option>
                 <option value="3">entre cuentas</option>
@@ -21,8 +21,10 @@
 
             <fieldset>
                 <label for="account-number">Cantidad</label>
-                <input type="text" maxlength="10">
+                <input @input="verifyAmount" type="text" maxlength="10" v-model="transactionAmount">
             </fieldset>
+
+            <p class="code--error"> {{ moneyAvailableError }}</p>
 
             <input type="submit" value="enviar" >
 
@@ -37,7 +39,12 @@ import DarkBackground from '@/modules/shared/components/DarkBackground.vue';
 
 const transactionType:Ref<number> = ref(1);
 const accountNumber:Ref<string> = ref('');
-const accountNumberError:Ref<string> = ref('')
+const accountNumberError:Ref<string> = ref('');
+
+const transactionAmount:Ref<number> = ref(0);
+
+const { moneyAvailable } = defineProps(['moneyAvailable']);
+const moneyAvailableError:Ref<string> = ref('');
 
 const verifyAccountNumber = ():boolean =>{
     const ACCOUNT_NUMBER_ERROR = 'El número de cuenta debe tener 10 dígitos'
@@ -47,6 +54,35 @@ const verifyAccountNumber = ():boolean =>{
     accountNumberError.value = isValid ? '' : ACCOUNT_NUMBER_ERROR 
     return isValid
 }
+
+const verifyAmount = ():boolean =>{
+
+    const MONEY_AVAILABLE_ERROR = 'No hay dinero suficiente';
+    let isValid = transactionAmount.value < moneyAvailable
+
+    if (transactionType.value == 2 || isValid) {
+        moneyAvailableError.value = '';
+    }else if(transactionType.value !== 2 && !isValid){
+        moneyAvailableError.value = MONEY_AVAILABLE_ERROR;
+    }
+
+    return  isValid
+}
+
+const doTransaction = () =>{
+
+    if (transactionType.value == 3 && !verifyAccountNumber() && !verifyAmount()
+         || transactionType.value == 3 && !verifyAccountNumber() && verifyAmount()
+         || transactionType.value == 3 && verifyAccountNumber() && !verifyAmount()
+         || transactionType.value == 1 && !verifyAmount()) {
+        return;
+    }
+
+    //peticion
+
+}
+
+
 
 </script>
 

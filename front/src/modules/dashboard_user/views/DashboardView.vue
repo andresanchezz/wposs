@@ -4,7 +4,7 @@
 
         <h2>Disponible: {{ moneyAvailable }}</h2>
 
-        <TransactionModal v-if="isModalActive" @close="isModalActive = false"/>
+        <TransactionModal v-if="isModalActive" @close="isModalActive = false" :money-available="moneyAvailable"/>
 
         <TransactionsTable />
 
@@ -26,7 +26,7 @@ import TransactionModal from '../components/TransactionModal.vue';
 
 const isModalActive:Ref<boolean> = ref(false);
 
-const moneyAvailable = ref(0);
+const moneyAvailable = ref(7000);
 
 import { closeSession } from '@/modules/shared/utils/close_session.utils';
 </script>
