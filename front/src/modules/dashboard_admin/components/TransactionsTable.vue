@@ -2,11 +2,8 @@
     <table>
         <thead>
             <tr>
-                <th>número de cuenta</th>
-                <th>nombre</th>
-                <th>identificación</th>
+                <th>transaccion id</th>
                 <th>tipo de transacción</th>
-                <th>fecha</th>
                 <th>monto</th>
             </tr>
         </thead>
@@ -14,7 +11,9 @@
 
         <tbody>
             <tr v-for="item in tableData">
-                <td>{{ item.identification }}</td>
+                <td>{{ item.id }}</td>
+                <td>{{ item.type }}</td>
+                <td>{{ item.amount }}</td>
             </tr>
         </tbody>
 
@@ -27,9 +26,10 @@ interface IProps {
 }
 
 interface ITableItems {
-    identification:string;
+    type: string,
+    id:number,
+    amount: number,
 }
-
 
 defineProps<IProps>();
 </script>

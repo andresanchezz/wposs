@@ -2,15 +2,15 @@
     <DarkBackground>
         <form @submit.prevent="doTransaction($event)">
             <label for="select-transaction">Tipo de transacción</label>
-            <select name="type" id="select-transaction" @change="verifyAmount" v-model="transactionType" required>
+            <select id="select-transaction" @change="verifyAmount" v-model="transactionType" required>
                 <option value="WITHDRAWAL">retiro</option>
                 <option value="DEPOSIT">depósito</option>
                 <option value="ACCOUNTS">entre cuentas</option>
             </select>
 
-            <fieldset v-if="transactionType == 3">
+            <fieldset v-if="transactionType == 'ACCOUNTS'">
                 <label for="account-number">número de cuenta</label>
-                <input type="text" maxlength="10"
+                <input type="text" maxlength="36"
                 id="account-number"
                 name="id_user"
                 @input="verifyAccountNumber"
@@ -39,6 +39,11 @@ import DarkBackground from '@/modules/shared/components/DarkBackground.vue';
 import { HTTP } from '@/api/clientHTTP';
 import handleRequest from '@/modules/shared/utils/handleErrors.utils';
 import { TRANSACTION_ROUTES } from '../utils/routes.utils';
+import { useAuthStore } from '@/stores/authStore';
+import { parseJwt } from '@/modules/shared/utils/parseJwt.utils';
+
+const store = useAuthStore();
+const account_number = store.userData.accountNumber;
 
 const transactionType:Ref<string | keyof typeof TRANSACTION_ROUTES> = ref('WITHDRAWAL');
 const accountNumber:Ref<string> = ref('');
@@ -52,9 +57,8 @@ const moneyAvailableError:Ref<string> = ref('');
 const emit = defineEmits(['updateTable'])
 
 const verifyAccountNumber = ():boolean =>{
-    const ACCOUNT_NUMBER_ERROR = 'El número de cuenta debe tener 10 dígitos'
-    const isValid = accountNumber.value.toString().length == 10
-    accountNumber.value = accountNumber.value.toString().replace(/\D/g, '');
+    const ACCOUNT_NUMBER_ERROR = 'El número de cuenta debe tener todos los dígitos'
+    const isValid = accountNumber.value.length == 36
 
     accountNumberError.value = isValid ? '' : ACCOUNT_NUMBER_ERROR 
     return isValid
@@ -84,9 +88,17 @@ const doTransaction = async(e:Event) =>{
     }
 
     let userData = Object.fromEntries(new FormData(e.target));
+    userData.amount = Number(userData.amount);
+
+    userData = {...userData, account: account_number}
 
     //peticion
-    handleRequest(HTTP.post(TRANSACTION_ROUTES[transactionType.value], userData), 'Transacción realizada');
+    if(transactionType.value == 'ACCOUNTS'){
+        handleRequest(HTTP.post(`/transactions/${accountNumber.value}`, userData), 'Transacción realizada');
+    }else{
+        handleRequest(HTTP.post(TRANSACTION_ROUTES[transactionType.value], userData), 'Transacción realizada');
+    }
+
 
     emit('updateTable');
 }

@@ -1,5 +1,5 @@
 export enum TRANSACTION_ROUTES{
-    WITHDRAWAL = 'auth/register',
-    DEPOSIT = 'auth/login',
-    ACCOUNTS = 'auth/roles'
+    WITHDRAWAL = 'transactions/withdraw',
+    DEPOSIT = 'transactions/deposit',
+    ACCOUNTS = 'transactions/'
 }

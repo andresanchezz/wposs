@@ -26,7 +26,10 @@ interface IProps {
 }
 
 interface ITableItems {
-    identification:string;
+    typeTransaction: string,
+    amount:string,
+    sendToId: string | null,
+    userId: string
 }
 
 

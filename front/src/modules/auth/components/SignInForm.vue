@@ -25,7 +25,7 @@ interface ITokenData {
     email:string,
     sub: number,
     exp: number,
-    id_rol: number
+    id_role: number
 }
 
 const store = useAuthStore();
@@ -40,12 +40,12 @@ const logUser = async(e:Event):Promise<void> =>{
     const data = await handleRequest(HTTP.post(AUTH_ROUTES.LOGIN, userData));
     
     if(data.data){
-
+        const userData = data.data
         const token = data.data.access_token
         store.setUserToken(token); 
-        const decoded:ITokenData = parseJwt(token);
-
-        (decoded.id_rol === 1) ? router.push({name: 'dashboard'}) :  router.push({name: 'dashboard-admin'})
+        store.setUserData( userData.idUser, userData.accountNumber, userData.id_role, userData.email, userData.amount); 
+  
+        (userData.id_role === 2) ? router.push({name: 'dashboard'}) :  router.push({name: 'dashboard-admin'})
     }
 }
 
