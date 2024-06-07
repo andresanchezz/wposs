@@ -1,5 +1,5 @@
 <template>
-    <form>
+    <form @submit.prevent="logUser($event)">
         <legend>Ingresa con tu correo</legend>
 
         <label for="email">correo electrónico</label>
@@ -14,6 +14,41 @@
 </template>
 
 <script lang="ts" setup>
+import { HTTP } from '@/api/clientHTTP';
+import handleRequest from '@/modules/shared/utils/handleErrors.utils';
+import { AUTH_ROUTES } from '../utils/routes.utils';
+import { useAuthStore } from '@/stores/authStore';
+import { parseJwt } from '@/modules/shared/utils/parseJwt.utils';
+import router from '@/router';
+
+interface ITokenData {
+    email:string,
+    sub: number,
+    exp: number,
+    id_rol: number
+}
+
+const store = useAuthStore();
+
+const logUser = async(e:Event):Promise<void> =>{
+
+    let userData;
+    if(e.target){
+        userData = Object.fromEntries(new FormData(e.target));
+    }
+        
+    const data = await handleRequest(HTTP.post(AUTH_ROUTES.LOGIN, userData));
+    
+    if(data.data){
+
+        const token = data.data.access_token
+        store.setUserToken(token); 
+        const decoded:ITokenData = parseJwt(token);
+
+        (decoded.id_rol === 1) ? router.push({name: 'dashboard'}) :  router.push({name: 'dashboard-admin'})
+    }
+}
+
 </script>
 
 <style lang="scss" scoped>

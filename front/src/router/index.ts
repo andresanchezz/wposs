@@ -1,4 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
+import adminGuard from './guards/admin.guard';
+import customerGuard from './guards/customer.guard';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,13 +27,15 @@ const router = createRouter({
     {
       path: '/dashboard-admin',
       name: 'dashboard-admin',
-      component: (()=>import('../modules/dashboard_admin/views/DashboardAdminView.vue'))
+      component: (()=>import('../modules/dashboard_admin/views/DashboardAdminView.vue')),
+      beforeEnter:[adminGuard]
     },
 
     {
       path: '/dashboard',
       name: 'dashboard',
-      component: (()=>import('../modules/dashboard_user/views/DashboardView.vue'))
+      component: (()=>import('../modules/dashboard_user/views/DashboardView.vue')),
+      beforeEnter:[customerGuard]
     },
 
   ]

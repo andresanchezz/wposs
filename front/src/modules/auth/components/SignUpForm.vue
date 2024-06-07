@@ -1,17 +1,20 @@
 <template>
-    <form>
+    <form @submit.prevent="createUser($event)">
         <legend>Registrar un usuario</legend>
 
         <label for="name">nombre</label>
         <input type="text" id="name" name="name" required autocomplete="off">
 
-        <label for="id">identificación</label>
-        <input type="number" id="id" name="id" required autocomplete="off">
-        <p v-if="idError" class="code--error">{{idError}}</p>
+        <label for="id_role">tipo de usuario</label>
+        <select name="id_role" id="id_role">
+            <option v-for="rol in roles" :value="rol.id">{{ rol.name }}</option>
+        </select>
+
+        <label for="identification">identificación</label>
+        <input type="number" id="identification" name="identification" required autocomplete="off">
 
         <label for="email">correo electrónico</label>
         <input type="email" id="email" name="email" required autocomplete="off">
-        <p v-if="emailError" class="code--error">{{emailError}}</p>
 
         <label for="password">contraseña</label>
         <input type="password" id="password" name="password" required autocomplete="off"
@@ -25,28 +28,55 @@
 </template>
 
 <script lang="ts" setup>
-import { ref} from 'vue';
+import { ref, onMounted} from 'vue';
 import type { Ref } from 'vue';
+import { HTTP } from '../../../api/clientHTTP';
+import { AUTH_ROUTES } from '../utils/routes.utils';
+import handleRequest from '@/modules/shared/utils/handleErrors.utils';
+
 
 const password:Ref<string> = ref('');
 const passwordError:Ref<string> = ref('');
-const REGEX = /^(?=.*[a-zA-Z])(?=.*\d).{4,}$/
+const REGEX = /^(?=.*[a-zA-Z])(?=.*\d).{5,}$/
 
-const idError:Ref<string> = ref('');
-const emailError:Ref<string> = ref('');
-
+const roles = ref();
 
 const validatePassword = ():boolean =>{
-    const PASSWORD_ERROR = 'Debe contener letras, números y al menos 4 caracteres';
+    const PASSWORD_ERROR = 'Debe contener letras, números y al menos 5 caracteres';
     const isValid = REGEX.test(password.value.trim());
 
     passwordError.value = isValid ? '' : PASSWORD_ERROR;
-    console.log(isValid);
+
     return isValid
 }
 
+const createUser = async(e:Event) =>{
+    
+    let userData = Object.fromEntries(new FormData(e.target));
+    userData.id_role = Number(userData.id_role);
+
+    if(!validatePassword()){
+        return
+    }else{
+        
+        const user = await handleRequest(HTTP.post(AUTH_ROUTES.REGISTER,  userData), 'Creado con éxito');
+        if(user){
+            const form = document.querySelector('form');
+            if(form){
+                form.reset()
+            }
+        }
+    }
+}
+
+const getRoles = async() =>{
+    roles.value = (await HTTP.get(AUTH_ROUTES.ROLES)).data;
+}
 
 
+onMounted(()=>{
+    getRoles();
+})
 
 </script>
 
@@ -54,10 +84,6 @@ const validatePassword = ():boolean =>{
 
     a{
         margin: 1rem 0 0 0;
-    }
-
-    .code--error{
-        color: red;
     }
 </style>
 

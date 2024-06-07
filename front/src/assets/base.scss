@@ -22,6 +22,7 @@
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
 
   --primary-color: #4e9ce4;
+  --gray-color: #857d7d1f;
 
   /* 
      #f1f8fd
@@ -76,6 +77,7 @@
   font-weight: normal;
 }
 
+
 body {
   min-height: 100vh;
   transition:
@@ -108,19 +110,30 @@ a {
 }
 
 form {
+  fieldset {
+    border: none;
+  }
+
   legend {
     font-weight: bold;
     text-align: center
   }
 
-  input {
+  input,
+  select {
     width: 100%;
     padding: .7vh 1rem;
     margin: 1vh 0;
 
-    &[type="submit"] {
+    &[type="submit"],
+    option {
       text-transform: uppercase;
     }
+  }
+
+  select {
+    padding: .7vh 0;
+    text-transform: uppercase;
   }
 
   label {
@@ -128,4 +141,38 @@ form {
     text-transform: capitalize;
   }
 
+}
+
+button {
+  font-family: "Poppins";
+
+  &:hover {
+    filter: opacity(.7);
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    background-color: #fff;
+    text-transform: uppercase;
+  }
+
+  tr:nth-child(odd) {
+    background-color: var(--gray-color);
+  }
+
+  td,
+  th {
+    border: 1px solid black;
+    padding: .5vh .5vw;
+    text-align: center;
+  }
+
+  /* 
+  th {}
+
+  td {} */
 }
