@@ -15,6 +15,7 @@ export const useAuthStore = defineStore('authenticatedUser', {
 
     getters: {
         userToken: (state) => state.authToken,
+        getUserData: (state) => state.userData
     },
 
     actions: {
@@ -30,7 +31,10 @@ export const useAuthStore = defineStore('authenticatedUser', {
         },
         clearUserToken() {
             this.$reset();
-        }
+        },
+        updateAmount(newAmount: number) {
+            this.userData.amount = newAmount;
+        },
 
     },
     persist: {

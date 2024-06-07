@@ -2,9 +2,9 @@ import { useAuthStore } from "../../stores/authStore";
 
 const adminGuard = async (to: any, from: any, next: any) => {
     const store = useAuthStore();
-    const token = store.userToken
+    const role = store.userData.id_role
 
-    token ? next() : next({ name: "sign-in" });
+    role === 1 ? next() : next({ name: "sign-in" });
 
 };
 

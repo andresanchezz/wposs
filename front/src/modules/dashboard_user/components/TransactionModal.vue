@@ -12,7 +12,7 @@
                 <label for="account-number">número de cuenta</label>
                 <input type="text" maxlength="36"
                 id="account-number"
-                name="id_user"
+                name="to"
                 @input="verifyAccountNumber"
                 v-model="accountNumber" 
                 required>
@@ -93,14 +93,17 @@ const doTransaction = async(e:Event) =>{
     userData = {...userData, account: account_number}
 
     //peticion
-    if(transactionType.value == 'ACCOUNTS'){
-        handleRequest(HTTP.post(`/transactions/${accountNumber.value}`, userData), 'Transacción realizada');
-    }else{
+    
         handleRequest(HTTP.post(TRANSACTION_ROUTES[transactionType.value], userData), 'Transacción realizada');
-    }
-
+    
+        if(transactionType.value == "ACCOUNTS" || "WITHDRAWAL"){
+            store.updateAmount(store.getUserData.amount -= transactionAmount.value);
+        }else{
+            store.updateAmount(store.getUserData.amount += transactionAmount.value);
+        }
 
     emit('updateTable');
+
 }
 
 

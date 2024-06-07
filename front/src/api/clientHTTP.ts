@@ -10,7 +10,7 @@ enum ContentType {
 const store = useAuthStore();
 
 const transactionsApi = (
-    baseURL: string = "https://cf28-2800-484-ad78-9911-e9c5-74a1-eebe-227c.ngrok-free.app/api",
+    baseURL: string = "http://localhost:3000/api/",
     contentType: ContentType = ContentType.JSON,
     applyInterceptor: boolean = true
 ): AxiosInstance => {
