@@ -4,9 +4,9 @@
 
         <h2>Disponible: {{ moneyAvailable }}</h2>
 
-        <TransactionModal v-if="isModalActive" @close="isModalActive = false" :money-available="moneyAvailable"/>
+        <TransactionModal @update-table="getTableData" v-if="isModalActive" @close="isModalActive = false" :money-available="moneyAvailable"/>
 
-        <TransactionsTable />
+        <TransactionsTable :table-data="[]" />
 
         <section >
             <ActionButton @click="isModalActive = true" :text="'Realizar una transacción'" :bg="'var(--primary-color)'"/>
@@ -29,6 +29,14 @@ const isModalActive:Ref<boolean> = ref(false);
 const moneyAvailable = ref(7000);
 
 import { closeSession } from '@/modules/shared/utils/close_session.utils';
+
+const getTableData = async() =>{
+
+}
+
+onMounted(()=>{
+    getTableData()
+})
 </script>
 
 <style lang="scss" scoped>

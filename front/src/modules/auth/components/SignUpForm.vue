@@ -7,7 +7,7 @@
 
         <label for="id_role">tipo de usuario</label>
         <select name="id_role" id="id_role">
-            <option v-for="rol in roles" :value="rol.id">{{ rol.name }}</option>
+            <option v-for="rol in roles" :value="rol.id">{{ rol.name}}</option>
         </select>
 
         <label for="identification">identificación</label>

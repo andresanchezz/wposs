@@ -10,25 +10,9 @@
 
 
         <tbody>
-            <tr>
-                <td>1934658101</td>
-                <td>Andrés Sánchez</td>
-                <td>1005109276</td>
-            </tr>
-            <tr>
-                <td>1934658101</td>
-                <td>Andrés Sánchez</td>
-                <td>1005109276</td>
-            </tr>
-            <tr>
-                <td>1934658101</td>
-                <td>Andrés Sánchez</td>
-                <td>1005109276</td>
-            </tr>
-            <tr>
-                <td>1934658101</td>
-                <td>Andrés Sánchez</td>
-                <td>Andrés Sánchez</td>
+            <tr v-for="item in tableData">
+                <td>{{ item.identification }}</td>
+
             </tr>
         </tbody>
 
@@ -36,6 +20,18 @@
 </template>
 
 <script lang="ts" setup>
+
+interface IProps {
+    tableData:ITableItems[]
+}
+
+interface ITableItems {
+    identification:string;
+}
+
+
+defineProps<IProps>();
+
 </script>
 
 <style lang="scss" scoped>
